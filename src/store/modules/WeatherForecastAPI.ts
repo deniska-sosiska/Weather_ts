@@ -7,10 +7,6 @@ import { CurrentWeatherAPI, WeeklyWeatherAPI, API_KEY } from '@/definitions'
 @Module
 class WeatherForecastAPI extends VuexModule {
   //state
-  // readonly currentWeatherAPI: string = currentWeatherAPI
-  // readonly weeklyWeatherAPI: string = weeklyWeatherAPI
-  // readonly apiKey: string = apiKey
-
   superficialForecast!: SuperficialForecastInterface
   wholeWeatherForecast!: WholeWeatherForecastInterface
   forecastOfWeek!: Array<WholeWeatherForecastInterface>
