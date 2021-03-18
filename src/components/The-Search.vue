@@ -6,7 +6,8 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import {  SearchCity  } from '@/definitions'
+  import {  SearchCity  } from '@/definitions/interfaces'
+  import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
 
   @Component
   export default class TheSearch extends Vue{
@@ -16,7 +17,7 @@
       const payload: SearchCity = {
         cityName: this.search
       }
-      this.$store.dispatch("fetchCurrentWeatherForecast", payload)
+      WeatherForecastAPIModule.fetchCurrentWeatherForecast(payload)
     }
   }
 </script>
