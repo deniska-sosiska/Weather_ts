@@ -1,21 +1,42 @@
 import axios from 'axios'
-import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators'
+import store from '@/store'
+import { LoadingModule } from './Loading'
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 
 import { Coordinates, SearchCity, WholeWeatherForecastInterface, SuperficialForecastInterface } from '@/definitions'
 import { CurrentWeatherAPI, WeeklyWeatherAPI, API_KEY } from '@/definitions'
 
-@Module
-class WeatherForecastAPI extends VuexModule {
+
+export interface WeatherForecastAPIState {
+  superficialForecast: SuperficialForecastInterface ;
+  wholeWeatherForecast: WholeWeatherForecastInterface;
+  forecastOfWeek: Array<WholeWeatherForecastInterface>;
+}
+
+// @Module
+@Module({ dynamic: true, store, name: 'WeatherForecastAPI' })
+class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
   //state
-  superficialForecast!: SuperficialForecastInterface
-  wholeWeatherForecast!: WholeWeatherForecastInterface
-  forecastOfWeek!: Array<WholeWeatherForecastInterface>
+  superficialForecast: SuperficialForecastInterface = {
+    city: '',
+    country: '',
+    temp: 0,
+    weather: ''
+  }
+  wholeWeatherForecast: WholeWeatherForecastInterface = { 
+    dataTime: 2000,
+    weather: '',
+    description: '',
+    humidity: 0,
+    temp: 0,
+    feelsLike: 0
+  } 
+  forecastOfWeek: Array<WholeWeatherForecastInterface> = []
   
   @Mutation setSuperficialForecast(payload: SuperficialForecastInterface): void {
     this.superficialForecast = payload
   }
   @Mutation setWholeWeatherForecast(payload: WholeWeatherForecastInterface): void {
-    // console.log("mutation: ", payload)
     this.wholeWeatherForecast = payload
   }
   @Mutation setForecastOfWeek(payload: Array<WholeWeatherForecastInterface>): void {
@@ -45,7 +66,7 @@ class WeatherForecastAPI extends VuexModule {
         this.context.commit('setWholeWeatherForecast', whole)
         this.context.commit('setSuperficialForecast', Superficial)
         this.context.dispatch('fetchWeeklyWeatherForecast', coordsObj)
-        this.context.commit('loadingMainTrue')
+        LoadingModule.loadingMainTrue()
       })
       .catch(err => {
         console.error("Error axios: ", err)
@@ -69,10 +90,12 @@ class WeatherForecastAPI extends VuexModule {
           forecastOfWeek.push(obj)
         })
 
-        forecastOfWeek.unshift(this.getWholeWeatherForecast) // forecast right now 
+        console.log(this.wholeWeatherForecast)
+        forecastOfWeek.unshift(this.wholeWeatherForecast) // forecast right now 
+        // forecastOfWeek.unshift(this.getWholeWeatherForecast) // forecast right now 
 
         this.context.commit('setForecastOfWeek', forecastOfWeek)
-        this.context.commit('loadingSelectTrue')
+        LoadingModule.loadingSelectTrue()
       })
       .catch(err => {
         console.error("Error axios: ", err)
@@ -92,4 +115,5 @@ class WeatherForecastAPI extends VuexModule {
   }
 }
 
-export default WeatherForecastAPI
+export const WeatherForecastAPIModule = getModule(WeatherForecastAPI)
+// export default WeatherForecastAPI

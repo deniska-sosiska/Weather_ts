@@ -4,7 +4,7 @@
     <div class="current">
       <!-- <h4>forecast right now</h4> -->
     </div>
-    <div v-for="(day, key) in getWeek" :key="key" class="day">
+    <div v-for="(day, key) in getForecastOfWeek" :key="key" class="day">
       <p v-if="day.dataTime === null" @click="setForecastForSelectedDay(day)">
         Right now: {{ getCurrentTime()  }}
       </p> 
@@ -17,23 +17,21 @@
 
 <script lang="ts">
   import {  Component, Vue  } from 'vue-property-decorator'
-  import {  Getter, Mutation  } from 'vuex-class'
 
+  import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
   import {  WholeWeatherForecastInterface  } from '@/definitions'
 
   @Component
   export default class TheWeekForecast extends Vue {
-    @Mutation setWholeWeatherForecast!: (data: WholeWeatherForecastInterface) => void
-
-    @Getter getForecastOfWeek!: Array<WholeWeatherForecastInterface>
-    get getWeek(): Array<WholeWeatherForecastInterface> {
-      return this.getForecastOfWeek
+    get getForecastOfWeek() {
+      console.log(WeatherForecastAPIModule.forecastOfWeek)
+      return WeatherForecastAPIModule.forecastOfWeek
     }
 
     setForecastForSelectedDay(day: WholeWeatherForecastInterface) {
-      // console.log("click")
-      this.setWholeWeatherForecast(day)
+      WeatherForecastAPIModule.setWholeWeatherForecast(day)
     }
+
     getCurrentTime(): string {
       let  hours: number|string = new Date().getHours();
       let  min: number|string = new Date().getMinutes()

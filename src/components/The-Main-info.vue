@@ -42,16 +42,12 @@
   import { Getter } from 'vuex-class'
   
   import { SuperficialForecastInterface, WholeWeatherForecastInterface } from '@/definitions'
-
+  
   @Component
   export default class TheMainWindow extends Vue {
     //computed
     @Getter getSuperficialForecast!: SuperficialForecastInterface
     @Getter getWholeWeatherForecast!: WholeWeatherForecastInterface  
-
-    click() {
-      console.log(this.getWholeWeatherForecast)
-    }
   }
   
 </script>
