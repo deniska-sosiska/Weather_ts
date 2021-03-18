@@ -39,17 +39,17 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import { Getter } from 'vuex-class'
+  import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
+  import { SuperficialForecastInterface, WholeWeatherForecastInterface } from '@/definitions/interfaces'
   
-  import { SuperficialForecastInterface, WholeWeatherForecastInterface } from '@/definitions'
-  
-  @Component
-  export default class TheMainWindow extends Vue {
-    //computed
-    @Getter getSuperficialForecast!: SuperficialForecastInterface
-    @Getter getWholeWeatherForecast!: WholeWeatherForecastInterface  
+  @Component export default class TheMainWindow extends Vue {
+    get getSuperficialForecast(): SuperficialForecastInterface {
+      return WeatherForecastAPIModule.superficialForecast
+    }
+    get getWholeWeatherForecast(): WholeWeatherForecastInterface {
+      return WeatherForecastAPIModule.wholeWeatherForecast
+    }
   }
-  
 </script>
 
 <style scoped lang="scss">
@@ -60,7 +60,7 @@
     height: 90vh;
   }
   .superficialWindow {
-    width: 260px;
+    width: 268px;
     & > p {
       text-align: end;
     }

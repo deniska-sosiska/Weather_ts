@@ -14,10 +14,7 @@ class Loading extends VuexModule implements LoadingState {
   @Mutation loadingMainTrue(): void {
     this.loadingMainWindow = true
   }
-  @Mutation loadingMainFalse(): void {
-    this.loadingMainWindow = false
-  }
-  
+
   @Mutation loadingSelectTrue(): void {
     this.loadingSelectDayWindow = true
   }
@@ -30,4 +27,3 @@ class Loading extends VuexModule implements LoadingState {
   }
 }
 export const LoadingModule = getModule(Loading)
-// export default Loading

@@ -3,9 +3,18 @@ import store from '@/store'
 import { LoadingModule } from './Loading'
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 
-import { Coordinates, SearchCity, WholeWeatherForecastInterface, SuperficialForecastInterface } from '@/definitions'
-import { CurrentWeatherAPI, WeeklyWeatherAPI, API_KEY } from '@/definitions'
+import { 
+  Coordinates,
+  SearchCity,
+  WholeWeatherForecastInterface,
+  SuperficialForecastInterface
+} from '@/definitions/interfaces'
 
+import { 
+  CurrentWeatherAPI,
+  WeeklyWeatherAPI,
+  API_KEY
+} from '@/definitions/config'
 
 export interface WeatherForecastAPIState {
   superficialForecast: SuperficialForecastInterface ;
@@ -13,7 +22,6 @@ export interface WeatherForecastAPIState {
   forecastOfWeek: Array<WholeWeatherForecastInterface>;
 }
 
-// @Module
 @Module({ dynamic: true, store, name: 'WeatherForecastAPI' })
 class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
   //state
@@ -61,11 +69,12 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
           weather: res.data.weather[0].main
         }
         const coordsObj: Coordinates = {
-          lat: res.data.coord.lat, lon: res.data.coord.lon
+          lat: res.data.coord.lat,
+          lon: res.data.coord.lon
         }
-        this.context.commit('setWholeWeatherForecast', whole)
-        this.context.commit('setSuperficialForecast', Superficial)
-        this.context.dispatch('fetchWeeklyWeatherForecast', coordsObj)
+        this.setWholeWeatherForecast(whole)
+        this.setSuperficialForecast(Superficial)
+        this.fetchWeeklyWeatherForecast(coordsObj)
         LoadingModule.loadingMainTrue()
       })
       .catch(err => {
@@ -90,28 +99,13 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
           forecastOfWeek.push(obj)
         })
 
-        console.log(this.wholeWeatherForecast)
         forecastOfWeek.unshift(this.wholeWeatherForecast) // forecast right now 
-        // forecastOfWeek.unshift(this.getWholeWeatherForecast) // forecast right now 
-
-        this.context.commit('setForecastOfWeek', forecastOfWeek)
+        this.setForecastOfWeek(forecastOfWeek)
         LoadingModule.loadingSelectTrue()
       })
       .catch(err => {
         console.error("Error axios: ", err)
       })
-  }
-
-  //Getters
-  get getSuperficialForecast(): SuperficialForecastInterface {
-    return this.superficialForecast
-  }
-  get getWholeWeatherForecast(): WholeWeatherForecastInterface {
-    // console.log("getter")
-    return this.wholeWeatherForecast
-  }
-  get getForecastOfWeek(): Array<WholeWeatherForecastInterface> {
-    return this.forecastOfWeek
   }
 }
 

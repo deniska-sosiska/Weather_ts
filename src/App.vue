@@ -14,13 +14,11 @@
   import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
   
   import { Component, Vue } from 'vue-property-decorator'
-  import { SearchCity } from '@/definitions'
+  import { SearchCity } from '@/definitions/interfaces'
 
   import TheMainInfo from './components/The-Main-info.vue'
   import TheSearch from './components/The-Search.vue'
   import TheWeekForecast from './components/The-Week-forecast.vue'
-
-
 
   @Component({
     components: {  TheMainInfo, TheSearch, TheWeekForecast  }

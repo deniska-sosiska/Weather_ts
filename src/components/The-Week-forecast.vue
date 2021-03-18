@@ -1,9 +1,6 @@
 <template>
   <div class="backgroundComponent selectComponent">
     <h3 style="text-align: center; margin-bottom: 20px;">You can see forecast for selected day</h3>
-    <div class="current">
-      <!-- <h4>forecast right now</h4> -->
-    </div>
     <div v-for="(day, key) in getForecastOfWeek" :key="key" class="day">
       <p v-if="day.dataTime === null" @click="setForecastForSelectedDay(day)">
         Right now: {{ getCurrentTime()  }}
@@ -17,28 +14,21 @@
 
 <script lang="ts">
   import {  Component, Vue  } from 'vue-property-decorator'
-
   import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
-  import {  WholeWeatherForecastInterface  } from '@/definitions'
+  import {  WholeWeatherForecastInterface  } from '@/definitions/interfaces'
 
-  @Component
-  export default class TheWeekForecast extends Vue {
-    get getForecastOfWeek() {
-      console.log(WeatherForecastAPIModule.forecastOfWeek)
+  @Component export default class TheWeekForecast extends Vue {
+    get getForecastOfWeek(): Array<WholeWeatherForecastInterface> {
       return WeatherForecastAPIModule.forecastOfWeek
     }
 
-    setForecastForSelectedDay(day: WholeWeatherForecastInterface) {
+    setForecastForSelectedDay(day: WholeWeatherForecastInterface): void {
       WeatherForecastAPIModule.setWholeWeatherForecast(day)
     }
 
     getCurrentTime(): string {
-      let  hours: number|string = new Date().getHours();
-      let  min: number|string = new Date().getMinutes()
-
-      hours = hours < 10 ? '0'+ hours: hours;
-      min = min < 10 ? '0'+ min : min 
-
+      let  hours: number|string = new Date().getHours(), /**/ min: number|string = new Date().getMinutes()
+      hours = hours < 10 ? '0'+ hours: hours; /**/  min = min < 10 ? '0'+ min : min 
       return hours + ':' +  min
     }
   }
