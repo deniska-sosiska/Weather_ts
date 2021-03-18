@@ -4,25 +4,48 @@
     <TheSearch />
     <TheWeekForecast />
   </div>
+
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
+
+  import { LoadingModule } from '@/store/modules/Loading'
+  import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
+  
   import { Component, Vue } from 'vue-property-decorator'
-  import { Getter, Action } from 'vuex-class'
+  import { SearchCity } from '@/definitions'
 
   import TheMainInfo from './components/The-Main-info.vue'
   import TheSearch from './components/The-Search.vue'
   import TheWeekForecast from './components/The-Week-forecast.vue'
 
+
+
   @Component({
     components: {  TheMainInfo, TheSearch, TheWeekForecast  }
   })
   export default class App extends Vue {
-    @Getter getLoadingMainWindow!: boolean
-    @Getter getLoadingSelectTrue!: boolean
+    get getLoadingMainWindow() {
+      return LoadingModule.loadingMainWindow
+    }
+    get getLoadingSelectTrue() {
+      return LoadingModule.loadingSelectDayWindow
+    }
 
-    @Action
-    fetchCurrentGeolocation!: () => void
+    fetchCurrentGeolocation(): void {
+      axios.get('https://geolocation-db.com/json/')
+        .then(res => {
+          WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: res.data.city  })
+        })
+        .catch(err => {
+          console.error("geolocationError: ", err.message)
+          const fallBackCity: SearchCity = { // default: Vilnius, Lithuania
+            cityName: "Vilnius"
+          }
+           WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: fallBackCity.cityName   })
+        })
+    }
     
     created() {
       this.fetchCurrentGeolocation()
