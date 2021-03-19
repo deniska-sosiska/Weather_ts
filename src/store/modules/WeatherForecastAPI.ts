@@ -1,9 +1,10 @@
-import axios from 'axios'
 import store from '@/store'
 import { LoadingModule } from './Loading'
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
+import { fetchCurrent, fetchWeekly } from "@/services/weather.service"
 
 import { 
+  WeatherForecastAPIState,
   Coordinates,
   SearchCity,
   WholeWeatherForecastInterface,
@@ -16,11 +17,7 @@ import {
   API_KEY
 } from '@/definitions/config'
 
-export interface WeatherForecastAPIState {
-  superficialForecast: SuperficialForecastInterface ;
-  wholeWeatherForecast: WholeWeatherForecastInterface;
-  forecastOfWeek: Array<WholeWeatherForecastInterface>;
-}
+
 
 @Module({ dynamic: true, store, name: 'WeatherForecastAPI' })
 class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
@@ -32,7 +29,7 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
     weather: ''
   }
   wholeWeatherForecast: WholeWeatherForecastInterface = { 
-    dataTime: 2000,
+    dataTime: 0,
     weather: '',
     description: '',
     humidity: 0,
@@ -51,61 +48,50 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
     this.forecastOfWeek = payload
   }
 
-  @Action fetchCurrentWeatherForecast(payload: SearchCity): void {
-    axios.get(`${CurrentWeatherAPI}q=${payload.cityName}&appid=${API_KEY}`)
-      .then((res) => {
-        const whole: WholeWeatherForecastInterface = {
-          dataTime: null,
-          weather: res.data.weather[0].main,
-          description: res.data.weather[0].description,
-          humidity: res.data.main.humidity,
-          temp: res.data.main.temp,
-          feelsLike: res.data.main.feels_like
-        }
-        const Superficial: SuperficialForecastInterface = {
-          city: res.data.name,
-          country: res.data.sys.country,
-          temp: res.data.main.temp,
-          weather: res.data.weather[0].main
-        }
-        const coordsObj: Coordinates = {
-          lat: res.data.coord.lat,
-          lon: res.data.coord.lon
-        }
-        this.setWholeWeatherForecast(whole)
-        this.setSuperficialForecast(Superficial)
-        this.fetchWeeklyWeatherForecast(coordsObj)
+  @Action async fetchCurrentWeatherForecast(payload: SearchCity): Promise<void> {
+    try {
+      let options: string
+      if (!payload.cityName) {
+        options = `lat=${payload.coords.lat}&lon=${payload.coords.lon}&appid=${API_KEY}`
+      } else {
+        options = `q=${payload.cityName}&appid=${API_KEY}`
+      }
+        
+    
+      const res = await fetchCurrent({
+        url: CurrentWeatherAPI,
+        options: options
+
+        // options: `q=${payload.cityName}&appid=${API_KEY}`
+      })
+      
+      if (res) {
+        this.setWholeWeatherForecast(res.whole)
+        this.setSuperficialForecast(res.superficial)
+        this.fetchWeeklyWeatherForecast(res.coordsObj)
         LoadingModule.loadingMainTrue()
-      })
-      .catch(err => {
-        console.error("Error axios: ", err)
-      })
+      }
+
+    } catch(err) {
+      console.error("store/fetchCurrentWeatherForecast: ", err)
+    }
   }
 
-  @Action fetchWeeklyWeatherForecast(payload: Coordinates) {
-    axios.get(`${WeeklyWeatherAPI}lat=${payload.lat}&lon=${payload.lon}&appid=${API_KEY}`)
-      .then((res) => {
-        const forecastOfWeek: Array<WholeWeatherForecastInterface> = []
+  @Action async fetchWeeklyWeatherForecast(payload: Coordinates) {
+    try {
+      const resArray = await fetchWeekly({
+        url: WeeklyWeatherAPI,
+        options: `lat=${payload.lat}&lon=${payload.lon}&appid=${API_KEY}`
+      })
 
-        res.data.daily.forEach((elem: any) => {
-          const obj: WholeWeatherForecastInterface = {
-            dataTime: elem.dt,
-            weather: elem.weather[0].main,
-            description: elem.weather[0].description,
-            humidity: elem.humidity,
-            temp: elem.temp.day,
-            feelsLike: elem.feels_like.day
-          }
-          forecastOfWeek.push(obj)
-        })
-
-        forecastOfWeek.unshift(this.wholeWeatherForecast) // forecast right now 
-        this.setForecastOfWeek(forecastOfWeek)
+      if (resArray) {
+        resArray.unshift(this.wholeWeatherForecast) // forecast right now 
+        this.setForecastOfWeek(resArray)
         LoadingModule.loadingSelectTrue()
-      })
-      .catch(err => {
-        console.error("Error axios: ", err)
-      })
+      }
+    } catch(err) {
+      console.log("store/fetchWeeklyWeatherForecast: ", err)
+    }
   }
 }
 

@@ -15,6 +15,7 @@
 
     searchCity(): void {
       const payload: SearchCity = {
+        coords: { lat : 0, lon: 0 }, //
         cityName: this.search
       }
       WeatherForecastAPIModule.fetchCurrentWeatherForecast(payload)

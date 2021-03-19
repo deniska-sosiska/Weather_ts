@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import {  LoadingState  } from './modules/Loading'
-import {  WeatherForecastAPIState  } from './modules/WeatherForecastAPI'
+import { LoadingState, WeatherForecastAPIState } from '@/definitions/interfaces'
 
 Vue.use(Vuex)
 

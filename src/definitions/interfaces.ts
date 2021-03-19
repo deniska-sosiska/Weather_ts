@@ -1,33 +1,31 @@
+export interface WeatherForecastAPIState {
+  superficialForecast: SuperficialForecastInterface ;
+  wholeWeatherForecast: WholeWeatherForecastInterface;
+  forecastOfWeek: Array<WholeWeatherForecastInterface>;
+}
+
+export interface LoadingState {
+  loadingSelectDayWindow: boolean;
+  loadingMainWindow: boolean;
+}
+
+export interface RequestObject {
+  url: string;
+  options: string;
+  method?: string;
+}
+
 type CityName = string
 export interface SearchCity {
-  cityName: CityName;
+  coords: Coordinates
+  cityName?: CityName;
 }
 
 export interface Coordinates {
   lat: number;
   lon: number;
-}
+} 
 
-interface Main {
-  temp: number;
-  feels_like: number;
-  temp_min: number;
-  temp_max: number;
-  pressure: number;
-}
-
-interface Sys {
-  type: number;
-  id: number;
-  country: string;
-  sunrise: number;
-  sunset: number;
-}
-
-interface Wind {
-  speed: number;
-  deg: number;
-}
 interface Weather {
   description: string;
   icon: string;
@@ -42,13 +40,28 @@ export interface CurrentWeatherResponseObj {
   coord: Coordinates; //my interface ↑↑↑
   dt: number;
   id: number;
-  main: Main; //my interface ↑↑↑
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+  };
   name: string;
-  sys: Sys; //my interface ↑↑↑
+  sys: {
+    type: number;
+    id: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+  };
   timezone: number;
   visibility: number;
   weather: Array<Weather>; //my interface ↑↑↑
-  wind: Wind; //my interface ↑↑↑
+  wind: {
+    speed: number;
+    deg: number;
+  }
 }
 
 export interface SuperficialForecastInterface {

@@ -1,10 +1,7 @@
 import store from '@/store'
 import { VuexModule, Module, Mutation, getModule } from 'vuex-module-decorators'
+import { LoadingState } from '@/definitions/interfaces'
 
-export interface LoadingState {
-  loadingSelectDayWindow: boolean;
-  loadingMainWindow: boolean;
-}
 
 @Module({ dynamic: true, store, name: 'Loading' })
 class Loading extends VuexModule implements LoadingState {
