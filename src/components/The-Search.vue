@@ -1,6 +1,9 @@
 <template>
   <div class="backgroundComponent searchComponent">
-    <input type="search" v-model="search" @change="searchCity()">
+    <form @submit.prevent="searchCity()">
+      <input type="search" v-model="search" placeholder='Example: "Kyiv"/"Киев"'>
+      <input type="submit" value="OK" style="width: auto; margin-left: 10px;">
+    </form>
   </div>
 </template>
 
@@ -14,21 +17,25 @@
     search = ''
 
     searchCity(): void {
-      const payload: SearchCity = {
-        coords: { lat : 0, lon: 0 }, //
-        cityName: this.search
+      if (this.search) {
+        const payload: SearchCity = {
+          coords: { lat : 0, lon: 0 }, //
+          cityName: this.search
+        }
+        WeatherForecastAPIModule.fetchCurrentWeatherForecast(payload)
+        this.search = ''
       }
-      WeatherForecastAPIModule.fetchCurrentWeatherForecast(payload)
     }
   }
 </script>
 
 <style lang="scss">
   .searchComponent {
-    height: 80px;
+    height: 90px;
     margin-top: 230px;
-    & > input {
-      width: 400px  ;
+    & > form > input {
+      font-size: 20px;
+      width: 250px  ;
       padding : 10px;
     }
   }

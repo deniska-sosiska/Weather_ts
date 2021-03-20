@@ -26,7 +26,7 @@
     components: {  TheMainInfo, TheSearch, TheWeekForecast  }
   })
   export default class App extends Vue {
-    readonly fallBack: Coordinates = { lon: 25.2798, lat: 54.689159 }
+    readonly fallBack: Coordinates = { lon: 25.2798, lat: 54.689159 } // default: Vilnius, Lithuania
 
     get getLoadingMainWindow() {
       return LoadingModule.loadingMainWindow
@@ -51,7 +51,7 @@
       }
       else {
         console.log("You have not geolocation")
-        WeatherForecastAPIModule.fetchCurrentWeatherForecast({ coords: this.fallBack })
+        WeatherForecastAPIModule.fetchCurrentWeatherForecast({ coords: this.fallBack }) 
       }
 
       //second 
