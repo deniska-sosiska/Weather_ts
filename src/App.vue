@@ -8,23 +8,24 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import { LoadingModule } from '@/store/modules/Loading'
   import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
-  
   import { Component, Vue } from 'vue-property-decorator'
-  import { SearchCity, Coordinates } from '@/definitions/interfaces'
 
   import TheMainInfo from './components/The-Main-info.vue'
   import TheSearch from './components/The-Search.vue'
   import TheWeekForecast from './components/The-Week-forecast.vue'
+  
+  import request from '@/services/generic.service'
 
   @Component({
     components: {  TheMainInfo, TheSearch, TheWeekForecast  }
   })
   export default class App extends Vue {
-    readonly fallBack: Coordinates = { lon: 25.2798, lat: 54.689159 } // default: Vilnius, Lithuania
+    // Date
+    private readonly fallBack = "Vilnius" // default: Vilnius, Lithuania
 
+    // Computed
     get getLoadingMainWindow() {
       return LoadingModule.loadingMainWindow
     }
@@ -32,43 +33,23 @@
       return LoadingModule.loadingSelectDayWindow
     }
 
-    fetchCurrentGeolocation(): void {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(res => {
-          const payload: Coordinates = {
-            lat: res.coords.latitude,
-            lon: res.coords.longitude
-          }
-          WeatherForecastAPIModule.fetchCurrentWeatherForecast({  coords: payload  })
-        },
-        (err) => {
-          console.error(err.message)
-          WeatherForecastAPIModule.fetchCurrentWeatherForecast({ coords: this.fallBack })
-        })
-      }
-      else {
-        console.log("You have not geolocation")
-        WeatherForecastAPIModule.fetchCurrentWeatherForecast({ coords: this.fallBack }) 
-      }
-
-      //second 
-
-      // axios.get('https://geolocation-db.com/json/')
-      //   .then(res => {
-      //     WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: res.data.city  })
-      //   })
-      //   .catch(err => {
-      //     console.error("geolocationError: ", err.message)
-      //     const fallBackCity: SearchCity = { // default: Vilnius, Lithuania
-      //       cityName: "Vilnius"
-      //     }
-      //      WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: fallBackCity.cityName   })
-      //   })
-    
-    }
-    
+    // Lifecycle Hooks
     created() {
       this.fetchCurrentGeolocation()
+    }
+
+    // Methods
+    async fetchCurrentGeolocation(): Promise<void> {
+      try {
+        const res = await request({
+          url: 'https://geolocation-db.com/json/'
+        })
+        WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: res.city  })
+      }
+      catch(err) {
+        WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: this.fallBack   })
+        console.error("App/fetchCurrentGeolocation : ", err)
+      }
     }
   }
 </script>

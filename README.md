@@ -14,3 +14,5 @@ npm run dev
 ```
 npm run b
 ```
+
+![Weather_ts](https://github.com/deniska-sosiska/Weather_ts/blob/main/src/assets/example.png)

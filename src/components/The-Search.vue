@@ -14,10 +14,10 @@
 
   @Component
   export default class TheSearch extends Vue{
-    // data
-    search = ''
+    // Data
+    private search = ''
 
-    // methods
+    // Methods
     sliceSpace(text: string): string {
     // sliceSpace => Рекурсия, для удаления лишних пробелов в конце,
     // поскольку название: "Kyiv  " выдаст нам ошибку, вместо результата  
@@ -29,13 +29,9 @@
 
     searchCity(): void {
       if (this.search) {
-        const cityName = this.sliceSpace(this.search)
-
-        const payload: SearchCity = {
-          coords: { lat : 0, lon: 0 }, //
-          cityName: cityName
-        }
-        WeatherForecastAPIModule.fetchCurrentWeatherForecast(payload)
+        WeatherForecastAPIModule.fetchCurrentWeatherForecast({
+          cityName: this.sliceSpace(this.search)
+        })
         this.search = ''
       }
     }

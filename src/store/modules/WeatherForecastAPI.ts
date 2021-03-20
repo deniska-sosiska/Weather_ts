@@ -18,7 +18,6 @@ import {
 } from '@/definitions/config'
 
 
-
 @Module({ dynamic: true, store, name: 'WeatherForecastAPI' })
 class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
   //state
@@ -38,6 +37,7 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
   } 
   forecastOfWeek: Array<WholeWeatherForecastInterface> = []
   
+  //Mutations
   @Mutation setSuperficialForecast(payload: SuperficialForecastInterface): void {
     this.superficialForecast = payload
   }
@@ -48,19 +48,13 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
     this.forecastOfWeek = payload
   }
 
+  //Actions
   @Action async fetchCurrentWeatherForecast(payload: SearchCity): Promise<void> {
     try {
-      let options: string
-      if (!payload.cityName) {
-        options = `lat=${payload.coords.lat}&lon=${payload.coords.lon}&appid=${API_KEY}`
-      } else {
-        options = `q=${payload.cityName}&appid=${API_KEY}`
-      }
-    
       const res = await fetchCurrent({
         url: CurrentWeatherAPI,
-        options: options
-        // options: `q=${payload.cityName}&appid=${API_KEY}`
+        options: `q=${payload.cityName}&appid=${API_KEY}`,
+        cityName: payload.cityName
       })
       
       if (res) {
@@ -87,6 +81,7 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
         this.setForecastOfWeek(resArray)
         LoadingModule.loadingSelectTrue()
       }
+
     } catch(err) {
       console.error("store/fetchWeeklyWeatherForecast: ", err)
     }

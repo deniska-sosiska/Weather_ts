@@ -11,14 +11,13 @@ export interface LoadingState {
 
 export interface RequestObject {
   url: string;
-  options: string;
-  method?: string;
+  options?: string;
+  cityName?: string;
 }
 
 type CityName = string
 export interface SearchCity {
-  coords: Coordinates
-  cityName?: CityName;
+  cityName: CityName;
 }
 
 export interface Coordinates {

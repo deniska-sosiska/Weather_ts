@@ -30,14 +30,16 @@
   import { timeStampToDay, timeStampToDate, getCurrentTime } from '@/services/operationsWithTime'
 
   @Component export default class TheWeekForecast extends Vue {
-    //data
+    // Data
     private activeIndex = 0
-    //computed
+    
+    // Computed
     get getForecastOfWeek(): Array<WholeWeatherForecastInterface> {
       this.activeIndex = 0
       return WeatherForecastAPIModule.forecastOfWeek
     }
-    //methods
+
+    // Methods
     setForecastForSelectedDay(day: WholeWeatherForecastInterface, index: number): void {
       this.activeIndex = index
       WeatherForecastAPIModule.setWholeWeatherForecast(day)
@@ -66,7 +68,6 @@
   .day > div {
     font-size: 24px;
     padding: 5px 0 5px 12px;
-    // padding: 5px auto;
     cursor: pointer;
     border-bottom: 1px solid rgba(0, 0, 0, 0);
     border-radius: 6px;
