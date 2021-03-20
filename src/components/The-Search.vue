@@ -14,10 +14,10 @@
 
   @Component
   export default class TheSearch extends Vue{
-    // data
+    // Data
     search = ''
 
-    // methods
+    // Methods
     sliceSpace(text: string): string {
     // sliceSpace => Рекурсия, для удаления лишних пробелов в конце,
     // поскольку название: "Kyiv  " выдаст нам ошибку, вместо результата  

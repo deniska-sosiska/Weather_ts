@@ -7,7 +7,7 @@ import {
 } from '@/definitions/interfaces'
 
 
-const fetchCurrent = async ({ url, options }: RequestObject) => {
+const fetchCurrent = async ({ url, options, cityName }: RequestObject) => {
   try {
     const res = await request({  url, options  })
     const whole: WholeWeatherForecastInterface = {
@@ -32,7 +32,7 @@ const fetchCurrent = async ({ url, options }: RequestObject) => {
     return { whole, superficial, coordsObj }
   }
   catch(err) {
-    alert("This city does not exist")
+    alert(`Can't to get a forecast for the city of "${cityName}"`)
     console.error("Service/fetchCurrent: ", err)
   }
 }

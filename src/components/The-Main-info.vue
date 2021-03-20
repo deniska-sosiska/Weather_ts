@@ -48,14 +48,14 @@
   import { timeStampToDay, timeStampToDate, getCurrentTime } from '@/services/operationsWithTime'
   
   @Component export default class TheMainWindow extends Vue {
-    //Computed
+    // Computed
     get getSuperficialForecast(): SuperficialForecastInterface {
       return WeatherForecastAPIModule.superficialForecast
     }
     get getWholeWeatherForecast(): WholeWeatherForecastInterface {
       return WeatherForecastAPIModule.wholeWeatherForecast
     }
-    //Methods
+    // Methods
     convertTemperature(temp: number): string {
       const response = `${Math.round(temp - 273.15)} °C ( ${temp}K )`
       return response

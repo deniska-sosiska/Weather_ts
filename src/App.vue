@@ -8,12 +8,11 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import { LoadingModule } from '@/store/modules/Loading'
   import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
   
   import { Component, Vue } from 'vue-property-decorator'
-  import { SearchCity, Coordinates } from '@/definitions/interfaces'
+  import { Coordinates } from '@/definitions/interfaces'
 
   import TheMainInfo from './components/The-Main-info.vue'
   import TheSearch from './components/The-Search.vue'
@@ -23,8 +22,10 @@
     components: {  TheMainInfo, TheSearch, TheWeekForecast  }
   })
   export default class App extends Vue {
-    readonly fallBack: Coordinates = { lon: 25.2798, lat: 54.689159 } // default: Vilnius, Lithuania
+    // Date
+    private readonly fallBack: Coordinates = { lon: 25.2798, lat: 54.689159 } // default: Vilnius, Lithuania
 
+    // Computed
     get getLoadingMainWindow() {
       return LoadingModule.loadingMainWindow
     }
@@ -32,8 +33,15 @@
       return LoadingModule.loadingSelectDayWindow
     }
 
+    // Lifecycle Hooks
+    created() {
+      this.fetchCurrentGeolocation()
+    }
+
+    // Methods
     fetchCurrentGeolocation(): void {
       if (navigator.geolocation) {
+        console.log(navigator)
         navigator.geolocation.getCurrentPosition(res => {
           const payload: Coordinates = {
             lat: res.coords.latitude,
@@ -50,25 +58,6 @@
         console.log("You have not geolocation")
         WeatherForecastAPIModule.fetchCurrentWeatherForecast({ coords: this.fallBack }) 
       }
-
-      //second 
-
-      // axios.get('https://geolocation-db.com/json/')
-      //   .then(res => {
-      //     WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: res.data.city  })
-      //   })
-      //   .catch(err => {
-      //     console.error("geolocationError: ", err.message)
-      //     const fallBackCity: SearchCity = { // default: Vilnius, Lithuania
-      //       cityName: "Vilnius"
-      //     }
-      //      WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: fallBackCity.cityName   })
-      //   })
-    
-    }
-    
-    created() {
-      this.fetchCurrentGeolocation()
     }
   }
 </script>

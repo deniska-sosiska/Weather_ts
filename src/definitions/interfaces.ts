@@ -1,5 +1,5 @@
 export interface WeatherForecastAPIState {
-  superficialForecast: SuperficialForecastInterface ;
+  superficialForecast: SuperficialForecastInterface;
   wholeWeatherForecast: WholeWeatherForecastInterface;
   forecastOfWeek: Array<WholeWeatherForecastInterface>;
 }
@@ -12,7 +12,7 @@ export interface LoadingState {
 export interface RequestObject {
   url: string;
   options: string;
-  method?: string;
+  cityName?: CityName
 }
 
 type CityName = string
