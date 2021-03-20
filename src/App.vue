@@ -19,9 +19,6 @@
   import TheSearch from './components/The-Search.vue'
   import TheWeekForecast from './components/The-Week-forecast.vue'
 
-  import request from '@/services/generic.service'
-
-
   @Component({
     components: {  TheMainInfo, TheSearch, TheWeekForecast  }
   })

@@ -61,7 +61,7 @@
 <style lang="scss">
   .selectComponent {
     width: 300px;
-    height: 440px;
+    height: 450px;
   }
   .day > div {
     font-size: 24px;
@@ -77,7 +77,6 @@
     }
     &.active {
       background: rgba(51, 133, 255, 0.7);
-      // border-bottom: 1px solid 0066ff;
     }
   }
   .timestamp {

@@ -9,18 +9,31 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import {  SearchCity  } from '@/definitions/interfaces'
+  import { SearchCity } from '@/definitions/interfaces'
   import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
 
   @Component
   export default class TheSearch extends Vue{
+    // data
     search = ''
+
+    // methods
+    sliceSpace(text: string): string {
+    // sliceSpace => Рекурсия, для удаления лишних пробелов в конце,
+    // поскольку название: "Kyiv  " выдаст нам ошибку, вместо результата  
+      if (text[text.length-1] === ' ') 
+        return this.sliceSpace(text.slice(0, text.length - 1))
+
+      else return text
+    }
 
     searchCity(): void {
       if (this.search) {
+        const cityName = this.sliceSpace(this.search)
+
         const payload: SearchCity = {
           coords: { lat : 0, lon: 0 }, //
-          cityName: this.search
+          cityName: cityName
         }
         WeatherForecastAPIModule.fetchCurrentWeatherForecast(payload)
         this.search = ''
@@ -39,5 +52,4 @@
       padding : 10px;
     }
   }
-  
 </style>

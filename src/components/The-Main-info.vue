@@ -92,12 +92,15 @@
   }
 
   .columns {
-    width: 370px;
+    width: 380px;
     & > .column {
       display: flex;
       align-items: flex-end;
-      padding: 5px 0px;
-      
+      padding: 5px 0 5px 8px;
+      border-radius: 6px;
+      &:hover {
+        background: rgba(51, 133, 255, 0.3);
+      }
       & > p:first-child {
         flex-shrink: 0;
         padding-right: 20px; 
