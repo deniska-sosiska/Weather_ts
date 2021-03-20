@@ -56,12 +56,10 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
       } else {
         options = `q=${payload.cityName}&appid=${API_KEY}`
       }
-        
     
       const res = await fetchCurrent({
         url: CurrentWeatherAPI,
         options: options
-
         // options: `q=${payload.cityName}&appid=${API_KEY}`
       })
       
@@ -77,7 +75,7 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
     }
   }
 
-  @Action async fetchWeeklyWeatherForecast(payload: Coordinates) {
+  @Action async fetchWeeklyWeatherForecast(payload: Coordinates): Promise<void> {
     try {
       const resArray = await fetchWeekly({
         url: WeeklyWeatherAPI,
@@ -90,7 +88,7 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
         LoadingModule.loadingSelectTrue()
       }
     } catch(err) {
-      console.log("store/fetchWeeklyWeatherForecast: ", err)
+      console.error("store/fetchWeeklyWeatherForecast: ", err)
     }
   }
 }

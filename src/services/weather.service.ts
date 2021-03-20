@@ -10,7 +10,6 @@ import {
 const fetchCurrent = async ({ url, options }: RequestObject) => {
   try {
     const res = await request({  url, options  })
-    console.log(res)
     const whole: WholeWeatherForecastInterface = {
       dataTime: null,
       weather: res.weather[0].main,
@@ -33,6 +32,7 @@ const fetchCurrent = async ({ url, options }: RequestObject) => {
     return { whole, superficial, coordsObj }
   }
   catch(err) {
+    alert("This city does not exist")
     console.error("Service/fetchCurrent: ", err)
   }
 }
