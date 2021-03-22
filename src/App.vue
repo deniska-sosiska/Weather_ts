@@ -41,7 +41,6 @@
     // Methods
     fetchCurrentGeolocation(): void {
       if (navigator.geolocation) {
-        console.log(navigator)
         navigator.geolocation.getCurrentPosition(res => {
           const payload: Coordinates = {
             lat: res.coords.latitude,
