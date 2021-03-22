@@ -47,7 +47,7 @@
         WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: res.city  })
       }
       catch(err) {
-        WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: this.fallBack   })
+        WeatherForecastAPIModule.fetchCurrentWeatherForecast({  cityName: this.fallBack  })
         console.error("App/fetchCurrentGeolocation : ", err)
       }
     }
@@ -73,7 +73,7 @@
     box-sizing: border-box;
   }
   body {
-    background: url('./assets/test.jpg') no-repeat 100% 100%;
+    background: url('./assets/back.jpg') no-repeat 100% 100%;
     background-attachment: fixed;
     background-size: cover;
   }

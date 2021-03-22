@@ -5,22 +5,17 @@ import { LoadingState } from '@/definitions/interfaces'
 
 @Module({ dynamic: true, store, name: 'Loading' })
 class Loading extends VuexModule implements LoadingState {
+  // State
   loadingMainWindow = false
   loadingSelectDayWindow = false
   
+  // Mutations
   @Mutation loadingMainTrue(): void {
     this.loadingMainWindow = true
   }
 
   @Mutation loadingSelectTrue(): void {
     this.loadingSelectDayWindow = true
-  }
-
-  get getLoadingMainWindow(): boolean {
-    return this.loadingMainWindow
-  }
-  get getLoadingSelectTrue(): boolean {
-    return this.loadingSelectDayWindow
   }
 }
 export const LoadingModule = getModule(Loading)

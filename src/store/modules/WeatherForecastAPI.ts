@@ -51,6 +51,10 @@ class WeatherForecastAPI extends VuexModule implements WeatherForecastAPIState {
   //Actions
   @Action async fetchCurrentWeatherForecast(payload: SearchCity): Promise<void> {
     try {
+      // Если не удалось получить название города
+      if (!payload.cityName)
+        payload.cityName = "Vilnius" // default: Vilnius, Lithuania
+
       const res = await fetchCurrent({
         url: CurrentWeatherAPI,
         options: `q=${payload.cityName}&appid=${API_KEY}`,

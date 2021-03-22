@@ -17,6 +17,7 @@ const getCurrentTime = (): string => {
   min = min < 10 ? '0'+ min : min 
   return "Right now: " + hours + ':' +  min
 }
+
 export {
   timeStampToDay,
   timeStampToDate,

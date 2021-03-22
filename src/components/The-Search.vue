@@ -9,7 +9,6 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import { SearchCity } from '@/definitions/interfaces'
   import { WeatherForecastAPIModule } from '@/store/modules/WeatherForecastAPI'
 
   @Component
@@ -20,8 +19,8 @@
     // Methods
     sliceSpace(text: string): string {
     // sliceSpace => Рекурсия, для удаления лишних пробелов в конце,
-    // поскольку название: "Kyiv  " выдаст нам ошибку, вместо результата  
-      if (text[text.length-1] === ' ') 
+    // поскольку название: "Kyiv  " выдаст нам ошибку, вместо желаемого результата.
+      if (text[text.length - 1] === ' ') 
         return this.sliceSpace(text.slice(0, text.length - 1))
 
       else return text
